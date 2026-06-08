@@ -1,37 +1,41 @@
 package com.generation.projeto_final_bloco_02.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tb_categorias")
-public class Categoria {
+@Table(name = "tb_produtos")
+public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotBlank(message = "O atributo nome é obrigatório!")
-	@Size(min = 5, max = 100, message = "O atributo nome deve conter no mínimo 5 e no máximo 100 caracteres")
+	@Size(min = 2, max = 100, message = "O atributo nome deve conter entre 2 e 100 caracteres")
 	private String nome;
 
-	@NotBlank(message = "O atributo descrição é obrigatória!")
-	@Size(min = 5, max = 255, message = "O atributo descrição deve conter no mínimo 5 e no máximo 255 caracteres")
+	@NotBlank(message = "O atributo descrição é obrigatório!")
+	@Size(min = 5, max = 255, message = "O atributo descrição deve conter entre 5 e 255 caracteres")
 	private String descricao;
 
-	@OneToMany(mappedBy = "categoria")
-	@JsonIgnoreProperties("categoria")
-	private List<Produto> produtos;
+	@NotNull(message = "O atributo preço é obrigatório!")
+	private Double preco;
+
+	@ManyToOne
+	@JoinColumn(name = "categoria_id")
+	@JsonIgnoreProperties("produtos")
+	private Categoria categoria;
 
 	public Long getId() {
 		return id;
@@ -57,12 +61,20 @@ public class Categoria {
 		this.descricao = descricao;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
+	public Double getPreco() {
+		return preco;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 }
